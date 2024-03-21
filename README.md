@@ -1,8 +1,7 @@
 # qp-assessment
 Grocery Booking Application
 
-Steps to run this project:
+Steps to start this project's server:
 
-1. Run `npm i` command
-2. Setup database settings inside `data-source.ts` file
-3. Run `npm start` command
+1. Docker compose up -d
+2. npm run dev
