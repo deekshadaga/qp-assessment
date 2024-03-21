@@ -46,5 +46,13 @@ export class UserController {
 
         return "user has been removed"
     }
+    async login(request: Request, response: Response, next: NextFunction) {
+        const {userName,password} = request.body
+        const registeredUser = await this.userRepository.findOne({
+            where: { userName,password }
+        })
+        request.session.admin = registeredUser.is_admin   
+        return registeredUser
+    }
 
 }

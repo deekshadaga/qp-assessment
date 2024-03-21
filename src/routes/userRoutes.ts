@@ -1,5 +1,5 @@
-import { GroceryController } from "../controller/GroceryController"
-import { UserController } from "../controller/UserController"
+import { GroceryController } from "../controllers/GroceryController"
+import { UserController } from "../controllers/UserController"
 
 export const UserRoutes = [{
     method: "get",
@@ -21,5 +21,11 @@ export const UserRoutes = [{
     route: "/removeUserById/:id",
     controller: UserController,
     action: "remove"
+},
+{
+    method: "post",
+    route: "/login",
+    controller: UserController,
+    action: "login"
 }
 ]

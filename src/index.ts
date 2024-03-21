@@ -7,7 +7,8 @@ import { port } from "./config"
 import { GroceryItem } from "./entity/Grocery"
 import { UserRoutes } from "./routes/userRoutes"
 import { GroceryRoutes } from "./routes/groceryRoutes"
-
+import { OrderRoutes } from "./routes/orderRoutes"
+import * as session from 'express-session';
 
 function handleError(err, req, res, next){
     res.status(err.statusCode || 500).send({message: err.message});
@@ -17,6 +18,12 @@ AppDataSource.initialize().then(async () => {
     // create express app
     const app = express()
     app.use(bodyParser.json())
+    app.use(session({
+        secret: 'secret string',
+        resave: false,  
+        saveUninitialized: false,
+        cookie: { maxAge:30000 }
+      }));
     // register express routes from defined application routes
     UserRoutes.forEach(route => {
         (app as any)[route.method](route.route, async (req: Request, res: Response, next: Function) => {
@@ -29,6 +36,16 @@ AppDataSource.initialize().then(async () => {
         })
     })
     GroceryRoutes.forEach(route => {
+        (app as any)[route.method](route.route, async (req: Request, res: Response, next: Function) => {
+            try{
+                const result = await (new (route.controller as any))[route.action](req, res, next)
+                res.json(result)}
+            catch(error){
+                next(error);
+            }
+        })
+    })
+    OrderRoutes.forEach(route => {
         (app as any)[route.method](route.route, async (req: Request, res: Response, next: Function) => {
             try{
                 const result = await (new (route.controller as any))[route.action](req, res, next)

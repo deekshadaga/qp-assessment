@@ -17,14 +17,17 @@ export class GroceryController {
         })
 
         if (!item) {
-            return "unregistered item"
+            return ("unregistered item")
         }
         return item
     }
 
     async add(request: Request, response: Response, next: NextFunction) {
         const { name, price,quantity } = request.body;
-
+        const is_admin = request.session.admin;
+        if(!is_admin){
+            return ("Unauthorized Access")
+        }
         const item = Object.assign(new GroceryItem(), {
             name,
             price,
@@ -36,11 +39,14 @@ export class GroceryController {
 
     async remove(request: Request, response: Response, next: NextFunction) {
         const id = parseInt(request.params.id)
-
+        const is_admin = request.session.admin;
+        if(!is_admin){
+            return ("Unauthorized Access")
+        }
         const itemToRemove = await this.groceryRepository.findOneBy({ id })
 
         if (!itemToRemove) {
-            throw Error("Grocery item does not exist") 
+            return ("Grocery item does not exist") 
         }
         
         await this.groceryRepository.remove(itemToRemove)
@@ -49,7 +55,10 @@ export class GroceryController {
     }
     async update(request: Request, response: Response, next: NextFunction) {
         const id = parseInt(request.params.id)
-        const { name, price,quantity } = request.body;
+        const is_admin = request.session.admin;
+        if(!is_admin){
+            return ("Unauthorized Access")
+        }
         const item = await this.groceryRepository.findOne({
             where: { id }
         })
@@ -61,5 +70,4 @@ export class GroceryController {
 
         return "Grocery item has been updated"
     }
-
 }

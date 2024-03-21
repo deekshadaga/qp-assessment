@@ -1,4 +1,4 @@
-import { GroceryController } from "../controller/GroceryController"
+import { GroceryController } from "../controllers/GroceryController"
 
 export const GroceryRoutes = [{
     method: "get",
