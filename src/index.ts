@@ -72,7 +72,7 @@ AppDataSource.initialize().then(async () => {
     )
     await AppDataSource.manager.save(
         AppDataSource.manager.create(User, {
-            userName: "AnujaVashisht",
+            userName: "abc",
             password: "qpAssessment@123",
             is_admin: false
         })
